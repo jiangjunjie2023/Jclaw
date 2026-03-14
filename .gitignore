@@ -1,0 +1,190 @@
+# ========================= 通用系统/编辑器文件 =========================
+# 操作系统临时文件
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN
+*.tmp
+*.swp
+*.swo
+*~
+
+# IDE/编辑器配置（VSCode/IntelliJ/Eclipse/Vim）
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+out/
+target/
+.classpath
+.project
+.settings/
+.factorypath
+.apt_generated/
+.buildpath
+*.launch
+*.pydevproject
+.DS_Store
+.nova/
+.vim/
+.svn/
+.git/
+.hg/
+
+# ========================= 编程语言专属 =========================
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+*.egg-info/
+.eggs/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg
+*.whl
+*.log
+.pytest_cache/
+.coverage
+htmlcov/
+*.pyd
+*.pyc
+*.pyz
+.ipynb_checkpoints/
+
+# Java
+*.class
+*.jar
+*.war
+*.ear
+*.jmod
+*.bak
+*.orig
+*.rej
+hs_err_pid*
+replay_pid*
+*.jprof
+*.hprof
+
+# JavaScript/前端
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+pnpm-debug.log
+*.local
+dist/
+build/
+coverage/
+.eslintcache
+*.tgz
+.vite/
+.next/
+out/
+*.min.js
+*.map
+
+# Go
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.prof
+vendor/
+bin/
+pkg/
+obj/
+
+# ========================= 构建/部署相关 =========================
+# 构建工具
+Makefile.old
+cmake-build-*/
+.gradle/
+gradlew.bat
+gradlew
+.nb-gradle/
+bower_components/
+.pnpm-store/
+
+# 容器/云原生
+.dockerignore
+docker-compose.override.yml
+*.dockerfile.bak
+kubeconfig.yaml
+.terraform/
+*.tfstate
+*.tfstate.backup
+secrets/
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# ========================= 日志/缓存/敏感文件 =========================
+# 日志
+logs/
+*.log
+*.log.*
+access.log
+error.log
+
+# 缓存
+.cache/
+.cargo/
+.npm/
+.yarn/
+
+# 敏感文件
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+*.env
+*.credentials
+*.config
+*.properties.bak
+id_rsa
+id_dsa
+authorized_keys
+
+# ========================= 文档/临时文件 =========================
+# 文档
+*.pdf
+*.docx
+*.xlsx
+*.pptx
+*.md.bak
+docs/_build/
+site/
+
+# 临时目录
+tmp/
+temp/
+backup/
+archive/

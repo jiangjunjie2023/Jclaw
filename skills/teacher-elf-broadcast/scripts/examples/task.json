@@ -1,0 +1,32 @@
+{
+  "email": "jiangjunjie3@xdf.cn",
+  "taskName": "技能包功能验证",
+  "taskType": 6,
+  "schoolId": 1,
+  "receiverList": [
+    {
+      "receiveType": 0,
+      "studentCode": "LY0121260501",
+      "studentName": "学员A",
+      "sendContentList": [
+        {
+          "content": "您好，这是一条测试消息。",
+          "msgType": "text",
+          "placeholderLabelList": []
+        }
+      ]
+    },
+    {
+      "receiveType": 0,
+      "studentCode": "LY0121532028",
+      "studentName": "学员B",
+      "sendContentList": [
+        {
+          "content": "您好，这是一条测试消息。",
+          "msgType": "text",
+          "placeholderLabelList": []
+        }
+      ]
+    }
+  ]
+}
