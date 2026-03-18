@@ -1,6 +1,6 @@
 ---
 name: teacher-elf-broadcast
-description: 创建教师精灵群发任务。当用户要求向学员/家长群发消息、创建教师精灵任务、课后反馈或学习包学情反馈时使用。需先配置 appId/appSecret 并可选预检。
+description: 创建企微群发任务。当用户要求向学员、家长、企微群发消息，或创建教师精灵任务(如课后反馈、课前提醒）时使用。需先配置 appId、appSecret。
 homepage: ""
 user-invocable: true
 metadata:
@@ -16,7 +16,7 @@ metadata:
   }
 ---
 
-# 教师精灵群发任务
+# 群发任务
 
 通过教师精灵 OpenAPI 创建群发任务：提交前可预检参数，提交后任务由教师精灵侧执行并推送结果（见对接文档中的 Kafka 结果消息）。
 
@@ -69,7 +69,7 @@ metadata:
    cd {baseDir}
    python3 scripts/teacher_elf_task.py preflight --payload-file scripts/examples/preflight-minimal.json
    ```
-   建议先把 `scripts/examples/preflight-minimal.json` 里的 `email` 改成你的邮箱，`studentCode` 改成你环境里存在的测试学员编码（若无真实学员，可先不改；接口可能返回业务校验错误，但能说明请求已到达服务端且鉴权通过）。
+   先把 `scripts/examples/preflight-minimal.json` 里的 `email` 改成你的邮箱，`studentCode` 改成你环境里存在的学员编码（接口可能返回业务校验错误，但能说明请求已到达服务端且鉴权通过）。
 
 3. **看返回结果**  
    - **能拿到 JSON 响应**（无论 `success` 为 true 或 false）：说明网络、鉴权、脚本均正常；若为业务错误（如参数不合法、学员不存在），按接口文档调整请求体即可。  
