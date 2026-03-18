@@ -1,0 +1,20 @@
+{
+  "email": "your-email@xdf.cn",
+  "taskName": "预检验证",
+  "taskType": 6,
+  "schoolId": 1,
+  "receiverList": [
+    {
+      "receiveType": 0,
+      "studentCode": "替换为真实学员编码",
+      "studentName": "学员姓名",
+      "sendContentList": [
+        {
+          "content": "预检内容",
+          "msgType": "text",
+          "placeholderLabelList": []
+        }
+      ]
+    }
+  ]
+}

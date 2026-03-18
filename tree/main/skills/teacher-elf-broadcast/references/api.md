@@ -30,9 +30,36 @@
 ## 提交任务请求体要点
 
 - **必填**：`email`、`taskName`、`taskType`、`schoolId`、`receiverList`
-- **taskType**：1-课后服务 2-课前提醒 3-开班提醒 4-首课回访 5-续费沟通 6-其他 7-学习包学情反馈 8-作业任务反馈
-- **receiverList[]**：`receiveType` 0-家长 1-本人 2-群聊；`studentCode`、`studentName`；`sendContentList` 为内容列表
-- **sendContentList[]**：`content`、`msgType`（text/link/file）；文本可用占位符如 `#学员姓名#`，对应 `placeholderLabelList`；链接/文件需 `id`、`msgFileSize`、`msgFileType` 等（见对接文档）
+- **taskType**（number）：1-课后服务 2-课前提醒 3-开班提醒 4-首课回访 5-续费沟通 6-其他 7-学习包学情反馈 8-作业任务反馈
+- **receiverList[]**：每项必含 `receiveType`（number, 0-家长 1-本人 2-群聊）、`studentCode`（string）、`studentName`（string）、`sendContentList`（array）
+- **sendContentList[]**：`content`（string）、`msgType`（string: text/link/file）；文本消息需 `msgType: "text"`，可选 `placeholderLabelList`（array）；链接/文件需 `id`、`msgFileSize`、`msgFileType` 等（见对接文档）
+
+### 提交任务(save) 最小合法示例（类型严格）
+
+```json
+{
+  "email": "your-email@xdf.cn",
+  "taskName": "任务名称",
+  "taskType": 6,
+  "schoolId": 1,
+  "receiverList": [
+    {
+      "receiveType": 0,
+      "studentCode": "学员编码",
+      "studentName": "学员姓名",
+      "sendContentList": [
+        {
+          "content": "消息正文",
+          "msgType": "text",
+          "placeholderLabelList": []
+        }
+      ]
+    }
+  ]
+}
+```
+
+注意：`taskType`、`schoolId`、`receiveType` 为 **数字**，不要写成字符串；`receiverList`、`sendContentList`、`placeholderLabelList` 为 **数组**。
 
 ## 响应与结果通知
 

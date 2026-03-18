@@ -120,6 +120,83 @@ metadata:
 
 完整字段与示例见 `{baseDir}/references/api.md`。
 
+## OpenClaw/Agent 调用规范
+
+使用本技能时请严格按以下规范执行，否则容易出现「入参 JSON 格式错误」或「接口已报错却误判为成功」。
+
+### 入参要求
+
+1. **必须使用 `--payload-file` 指定 JSON 文件路径**，不要通过 stdin 或命令行片段传复杂 JSON。
+2. **JSON 文件要求**：
+   - 文件编码为 **UTF-8**；
+   - 合法 JSON（可先用 `python3 -c "import json; json.load(open('你的文件.json'))"` 自检）；
+   - 字段名、类型与下表一致，**不要**多写无关字段或错误类型（如 `taskType` 为数字不是字符串）。
+
+| 字段 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| email | string | 是 | 发起人邮箱 |
+| taskName | string | 是 | 任务名称 |
+| taskType | number | 是 | 1–8，见上文 |
+| schoolId | number | 是 | 学校 ID |
+| receiverList | array | 是 | 接收人列表，见下 |
+
+**receiverList[] 每项**：
+
+| 字段 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| receiveType | number | 是 | 0-家长 1-本人 2-群聊 |
+| studentCode | string | 是 | 学员编码 |
+| studentName | string | 是 | 学员姓名 |
+| sendContentList | array | 是 | 内容列表，见下 |
+
+**sendContentList[] 每项**（文本消息最少字段）：
+
+| 字段 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| content | string | 是 | 正文，可用占位符如 `#学员姓名#` |
+| msgType | string | 是 | 固定 `"text"` |
+| placeholderLabelList | array | 否 | 占位符标签列表，无则 `[]` |
+
+3. **可直接复用的最小示例**（保存为 `task.json` 后替换邮箱、学员编码等）：
+
+```json
+{
+  "email": "your-email@xdf.cn",
+  "taskName": "任务名称",
+  "taskType": 6,
+  "schoolId": 1,
+  "receiverList": [
+    {
+      "receiveType": 0,
+      "studentCode": "学员编码",
+      "studentName": "学员姓名",
+      "sendContentList": [
+        {
+          "content": "消息正文",
+          "msgType": "text",
+          "placeholderLabelList": []
+        }
+      ]
+    }
+  ]
+}
+```
+
+### 结果解析（必须按此判断成功/失败）
+
+脚本会在 **stdout 最后输出一行** 供 Agent 解析，格式固定为：
+
+```
+OPENCLAW_RESULT={"success": true|false, "message": "可选错误信息", "data": 可选接口返回数据}
+```
+
+- **成功**：`OPENCLAW_RESULT` 中 `success` 为 `true`，且进程 exit code 为 0。可把 `data` 中的 `taskId` 等告知用户。
+- **失败**：`OPENCLAW_RESULT` 中 `success` 为 `false`，且进程 exit code 非 0。**必须**把 `message` 中的错误原因告知用户，不得回复「任务创建成功」。
+
+**解析步骤建议**：在脚本完整输出中查找包含 `OPENCLAW_RESULT=` 的那一行，解析其后的 JSON，根据 `success` 与 `message` 决定回复内容；若未找到该行，则根据 exit code 和 stderr 判断（如文件不存在、JSON 格式错误等）。
+
+**调试**：需要查看完整请求/响应时，可设置环境变量 `TEACHER_ELF_DEBUG=1` 再执行脚本，会输出待签字符串、接口返回等；正常派发时无需设置。
+
 ## 安全与确认
 
 - 写操作（提交任务、初始化关系）前必须明确用户意图并确认。
