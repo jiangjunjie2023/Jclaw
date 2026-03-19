@@ -25,7 +25,7 @@ except ImportError:
     from urllib2 import Request, urlopen, HTTPError, URLError  # type: ignore
 
 # 全局配置（与 SKILL 一致：不设则默认生产）
-DEFAULT_BASE_URL = os.environ.get("TEACHER_ELF_BASE_URL", "").strip() or "https://gateway.staff.xdf.cn"
+DEFAULT_BASE_URL = os.environ.get("TEACHER_ELF_BASE_URL", "").strip() or "https://gateway.test.xdf.cn"
 
 ENDPOINTS = {
     "preflight": "/magic-open/api/group/send/task/preflight",

@@ -1,7 +1,7 @@
 {
   "email": "your-email@xdf.cn",
   "taskName": "预检验证",
-  "taskType": 6,
+  "taskType": 1,
   "schoolId": 1,
   "receiverList": [
     {
