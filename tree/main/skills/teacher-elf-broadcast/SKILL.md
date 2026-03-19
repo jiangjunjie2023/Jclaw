@@ -79,29 +79,47 @@ metadata:
 4. **在 OpenClaw 中验证**  
    若技能已放入 OpenClaw 的加载目录（如 workspace 的 `skills/` 或 `~/.openclaw/skills`），可在对话中让 Agent 执行「对教师精灵做一次预检」或「用教师精灵预检接口验证一下」，确认 Agent 能正确调用本技能与脚本。
 
-## 常用流程
+## 创建群发任务流程（必须遵守）
 
-1. **预检（推荐先执行）**  
-   检查组装的参数是否符合创建任务要求，避免提交后因校验失败退回。
+**在真正调用「提交任务」接口之前**，必须完成以下步骤，缺一不可：
+
+1. **组装请求体**  
+   根据用户意图组装好 `task.json`（含 `email`、`taskName`、`taskType`、`schoolId`、`receiverList` 等），格式见下文「请求体格式要点」与 `references/api.md`。
+
+2. **预检（推荐）**  
+   调用预检接口，确保参数合法、学员存在等，避免提交后失败。
 
    ```bash
    python3 {baseDir}/scripts/teacher_elf_task.py preflight --payload-file /path/to/task.json
    ```
 
-   或从 stdin 传入 JSON：
+3. **向用户展示并确认（必须执行，不可跳过）**  
+   - 从请求体（或预检结果）中提取并**清晰展示给用户**：
+     - **发给谁**：接收人列表。例如按 `receiverList` 逐条列出：学员姓名（`studentName`）、学员编码（`studentCode`）、接收对象类型（`receiveType`：0-家长 / 1-本人 / 2-群聊），以及人数统计。
+     - **发什么**：发送内容。例如 `sendContentList` 中的每条 `content`（文本正文）、`msgType`（文本/链接/文件）等；若有占位符如 `#学员姓名#`，说明实际下发时会替换。
+   - **明确询问用户**：「以上接收人和发送内容是否正确？确认后将创建群发任务。」
+   - **仅在用户明确确认**（如回复「确认」「可以」「发吧」等）后，才执行第 4 步；若用户要求修改，则回到步骤 1 调整请求体再走 2～3。
 
-   ```bash
-   cat /path/to/task.json | python3 {baseDir}/scripts/teacher_elf_task.py preflight
-   ```
-
-2. **提交任务**  
-   组装好 `email`、`taskName`、`taskType`、`schoolId`、`receiverList` 等（见对接文档），写入 JSON 文件后提交：
+4. **提交任务**  
+   用户确认后，再调用提交接口：
 
    ```bash
    python3 {baseDir}/scripts/teacher_elf_task.py save --payload-file /path/to/task.json
    ```
 
-3. **批量查询关系 / 校验并初始化关系**  
+5. **反馈结果**  
+   根据脚本输出的 `OPENCLAW_RESULT` 与 exit code，将成功（含 `taskId` 等）或失败原因告知用户。
+
+## 其他常用流程
+
+1. **仅预检**（不创建任务时）  
+   检查组装的参数是否符合创建任务要求。
+
+   ```bash
+   python3 {baseDir}/scripts/teacher_elf_task.py preflight --payload-file /path/to/task.json
+   ```
+
+2. **批量查询关系 / 校验并初始化关系**  
    需要时调用（见 references/api.md）：
    - 批量查询关系（一次最多 50 学员）：`batch-query`
    - 校验并初始化关系（一次最多 100 学员）：`init-verify`
@@ -199,6 +217,7 @@ OPENCLAW_RESULT={"success": true|false, "message": "可选错误信息", "data":
 
 ## 安全与确认
 
-- 写操作（提交任务、初始化关系）前必须明确用户意图并确认。
+- **创建群发任务前**：必须按上文「创建群发任务流程」先向用户展示「发给谁」「发什么」，并获得用户明确确认后再调用提交接口；不得在未确认前直接执行 `save`。
+- 其他写操作（如初始化关系）前也必须明确用户意图并确认。
 - 不在日志或回复中输出 appSecret 或完整 token。
 - 验签逻辑以对接文档为准；若与脚本实现不一致，需按文档调整脚本或联系接口提供方。
